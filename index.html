@@ -3,51 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pro Weather App</title>
+  <title>Professional Weather App</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <nav class="sidebar" id="sidebar">
-    <h2>☁️ ProWeather</h2>
-    <ul>
-      <li onclick="showSection('home')">🏠 Home</li>
-      <li onclick="showSection('profile')">👤 Profile</li>
-      <li onclick="showSection('settings')">⚙️ Settings</li>
+  <!-- Sidebar Navigation -->
+  <nav id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <h1>☁️ ProWeather</h1>
+      <button id="sidebarCloseBtn" aria-label="Close Menu">✖</button>
+    </div>
+    <ul class="sidebar-menu">
+      <li class="sidebar-item active" data-section="home">🏠 Home</li>
+      <li class="sidebar-item" data-section="profile">👤 Profile</li>
+      <li class="sidebar-item" data-section="settings">⚙️ Settings</li>
     </ul>
   </nav>
 
-  <main class="main-content">
-    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+  <!-- Main Content -->
+  <div id="mainContent" class="main-content">
+    <header class="header">
+      <button id="sidebarToggleBtn" aria-label="Toggle Menu">☰</button>
+      <h2 id="pageTitle">Home</h2>
+    </header>
 
+    <!-- Sections -->
     <section id="home" class="section active">
-      <h1>🌤️ Weather</h1>
-      <div id="datetime"></div>
+      <div class="datetime" id="datetime"></div>
 
       <div class="search-bar">
         <input
-          type="text"
           id="cityInput"
-          placeholder="Enter city or leave empty for current location"
+          type="text"
+          placeholder="Enter city or leave blank for current location"
+          aria-label="City Search Input"
         />
-        <button onclick="getWeather()">Search</button>
+        <button id="searchBtn" aria-label="Search Weather">🔍</button>
       </div>
 
-      <div id="weatherResult" class="weather-card"></div>
-      <div id="forecast" class="forecast-container"></div>
+      <div id="weatherCurrent" class="weather-current"></div>
+
+      <div id="weatherForecast" class="weather-forecast"></div>
     </section>
 
     <section id="profile" class="section">
-      <h1>👤 Profile</h1>
-      <p><strong>Name:</strong> Zahirul</p>
-      <p><strong>Email:</strong> zahirul@example.com</p>
-      <p><strong>Location:</strong> Bangladesh</p>
+      <h3>Your Profile</h3>
+      <div class="profile-info">
+        <p><strong>Name:</strong> Zahirul</p>
+        <p><strong>Email:</strong> zahirul@example.com</p>
+        <p><strong>Location:</strong> Bangladesh</p>
+      </div>
     </section>
 
     <section id="settings" class="section">
-      <h1>⚙️ Settings</h1>
-      <button onclick="toggleTheme()">Toggle Dark/Light Theme</button>
+      <h3>Settings</h3>
+      <div class="settings-item">
+        <label for="themeToggle">Dark Mode:</label>
+        <input type="checkbox" id="themeToggle" aria-label="Toggle Dark Mode" />
+      </div>
+
+      <div class="settings-item">
+        <label for="unitSelect">Temperature Unit:</label>
+        <select id="unitSelect" aria-label="Select Temperature Unit">
+          <option value="metric" selected>°C (Celsius)</option>
+          <option value="imperial">°F (Fahrenheit)</option>
+        </select>
+      </div>
+
+      <div class="settings-item">
+        <label for="langSelect">Language:</label>
+        <select id="langSelect" aria-label="Select Language">
+          <option value="en" selected>English</option>
+          <option value="bn">বাংলা (Bangla)</option>
+        </select>
+      </div>
     </section>
-  </main>
+  </div>
 
   <script src="script.js"></script>
 </body>
