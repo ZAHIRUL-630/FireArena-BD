@@ -86,7 +86,26 @@ button:hover {
   box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-/* Section Display */
+.forecast-card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin-top: 15px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: space-between;
+}
+
+.forecast-day {
+  flex: 1;
+  margin: 0 5px;
+  text-align: center;
+}
+
+.forecast-day h4 {
+  margin-bottom: 8px;
+}
+
 .section {
   display: none;
 }
@@ -109,7 +128,8 @@ body.dark .main {
   background-color: #1e1e1e;
 }
 
-body.dark .weather-card {
+body.dark .weather-card,
+body.dark .forecast-card {
   background-color: #2a2a2a;
   color: #ddd;
 }
