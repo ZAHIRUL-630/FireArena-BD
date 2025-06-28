@@ -1,5 +1,11 @@
 const apiKey = "https://api.open-meteo.com/v1/forecast";
 
+document.addEventListener("DOMContentLoaded", () => {
+  updateDateTime();
+  setInterval(updateDateTime, 1000);
+  getWeather(); // Auto load current location weather on page load
+});
+
 function updateDateTime() {
   const dtElem = document.getElementById("datetime");
   const now = new Date();
@@ -16,7 +22,6 @@ function updateDateTime() {
   let minutes = now.getMinutes();
   let seconds = now.getSeconds();
 
-  // 12-hour format & am/pm
   const ampm = hours >= 12 ? 'PM' : 'AM';
   hours = hours % 12 || 12;
   minutes = minutes < 10 ? '0'+minutes : minutes;
@@ -28,9 +33,21 @@ function updateDateTime() {
   dtElem.innerHTML = `<p>${dateString} | ${timeString}</p>`;
 }
 
-// Call updateDateTime every second
-setInterval(updateDateTime, 1000);
-updateDateTime();
+function toggleSidebar() {
+  const sidebar = document.getElementById("sidebar");
+  sidebar.classList.toggle("active");
+}
+
+function showSection(id) {
+  document.querySelectorAll(".section").forEach((sec) => {
+    sec.classList.remove("active");
+  });
+  document.getElementById(id).classList.add("active");
+}
+
+function toggleTheme() {
+  document.body.classList.toggle("dark");
+}
 
 function getWeather() {
   const cityInput = document.getElementById("cityInput");
@@ -43,28 +60,24 @@ function getWeather() {
 
   if (city) {
     fetchWeatherByCity(city);
+  } else if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
+      },
+      () => {
+        resultDiv.innerHTML = "<p>Geolocation permission denied. Please enter city manually.</p>";
+      }
+    );
   } else {
-    // If no city, use browser geolocation
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          fetchWeatherByCoords(position.coords.latitude, position.coords.longitude);
-        },
-        () => {
-          resultDiv.innerHTML = "<p>Geolocation permission denied. Please enter city manually.</p>";
-        }
-      );
-    } else {
-      resultDiv.innerHTML = "<p>Geolocation not supported. Please enter city manually.</p>";
-    }
+    resultDiv.innerHTML = "<p>Geolocation not supported. Please enter city manually.</p>";
   }
 }
 
 function fetchWeatherByCity(city) {
   const resultDiv = document.getElementById("weatherResult");
-  const forecastDiv = document.getElementById("forecast");
 
-  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${city}`)
+  fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}`)
     .then(res => res.json())
     .then(data => {
       if (!data.results || data.results.length === 0) {
@@ -75,7 +88,7 @@ function fetchWeatherByCity(city) {
       fetchWeatherByCoords(latitude, longitude, name, country);
     })
     .catch(() => {
-      document.getElementById("weatherResult").innerHTML = "<p>Error fetching location data.</p>";
+      resultDiv.innerHTML = "<p>Error fetching location data.</p>";
     });
 }
 
@@ -96,52 +109,11 @@ function fetchWeatherByCoords(lat, lon, cityName = '', country = '') {
       const current = data.current_weather;
       const daily = data.daily;
 
-      // Weather condition codes reference: https://open-meteo.com/en/docs#latitude=52.52&longitude=13.41&hourly=temperature_2m
-
-      resultDiv.innerHTML = `
-        <h2>${cityName || 'Current Location'}, ${country || ''}</h2>
-        <p><strong>Temperature:</strong> ${current.temperature} °C</p>
-        <p><strong>Wind Speed:</strong> ${current.windspeed} km/h</p>
-        <p><strong>Condition Code:</strong> ${current.weathercode}</p>
-      `;
-
-      // Show daily forecast
-      let forecastHTML = '';
-      for (let i = 0; i < daily.time.length; i++) {
-        const dayDate = new Date(daily.time[i]);
-        const dayName = dayDate.toLocaleDateString('en-US', { weekday: 'short' });
-        forecastHTML += `
-          <div class="forecast-day">
-            <h4>${dayName}</h4>
-            <p>Max: ${daily.temperature_2m_max[i]} °C</p>
-            <p>Min: ${daily.temperature_2m_min[i]} °C</p>
-            <p>Code: ${daily.weathercode[i]}</p>
-          </div>
-        `;
-      }
-      forecastDiv.innerHTML = forecastHTML;
-    })
-    .catch(() => {
-      resultDiv.innerHTML = "<p>Error fetching weather data.</p>";
-    });
-}
-
-function toggleSidebar() {
-  const sidebar = document.getElementById("sidebar");
-  if(sidebar.style.display === "none" || sidebar.style.display === "") {
-    sidebar.style.display = "block";
-  } else {
-    sidebar.style.display = "none";
-  }
-}
-
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(sec => {
-    sec.classList.remove('active');
-  });
-  document.getElementById(id).classList.add('active');
-}
-
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-}
+      // Map weathercode to description & icon (simplified)
+      const weatherDescriptions = {
+        0: "Clear sky",
+        1: "Mainly clear",
+        2: "Partly cloudy",
+        3: "Overcast",
+        45: "Fog",
+        48: "Depositing r

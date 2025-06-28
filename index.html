@@ -3,46 +3,51 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Advanced Weather App</title>
+  <title>Pro Weather App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="sidebar" id="sidebar">
-    <h2>☁️ Weather Pro</h2>
+  <nav class="sidebar" id="sidebar">
+    <h2>☁️ ProWeather</h2>
     <ul>
       <li onclick="showSection('home')">🏠 Home</li>
       <li onclick="showSection('profile')">👤 Profile</li>
       <li onclick="showSection('settings')">⚙️ Settings</li>
     </ul>
-  </div>
+  </nav>
 
-  <div class="main">
+  <main class="main-content">
     <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
 
-    <!-- Home Section -->
     <section id="home" class="section active">
-      <h1>🌤️ Weather App</h1>
+      <h1>🌤️ Weather</h1>
       <div id="datetime"></div>
-      <input type="text" id="cityInput" placeholder="Enter city name or leave empty for current location" />
-      <button onclick="getWeather()">Check Weather</button>
+
+      <div class="search-bar">
+        <input
+          type="text"
+          id="cityInput"
+          placeholder="Enter city or leave empty for current location"
+        />
+        <button onclick="getWeather()">Search</button>
+      </div>
+
       <div id="weatherResult" class="weather-card"></div>
-      <div id="forecast" class="forecast-card"></div>
+      <div id="forecast" class="forecast-container"></div>
     </section>
 
-    <!-- Profile Section -->
     <section id="profile" class="section">
-      <h1>👤 My Profile</h1>
-      <p>Name: Zahirul</p>
-      <p>Email: zahirul@example.com</p>
-      <p>Location: Bangladesh</p>
+      <h1>👤 Profile</h1>
+      <p><strong>Name:</strong> Zahirul</p>
+      <p><strong>Email:</strong> zahirul@example.com</p>
+      <p><strong>Location:</strong> Bangladesh</p>
     </section>
 
-    <!-- Settings Section -->
     <section id="settings" class="section">
       <h1>⚙️ Settings</h1>
-      <p>Theme: <button onclick="toggleTheme()">Toggle Dark/Light</button></p>
+      <button onclick="toggleTheme()">Toggle Dark/Light Theme</button>
     </section>
-  </div>
+  </main>
 
   <script src="script.js"></script>
 </body>
