@@ -3,16 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Weather App</title>
+  <title>Weather Pro App</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Weather App</h1>
-    <input type="text" id="cityInput" placeholder="Enter city name" />
-    <button onclick="getWeather()">Check Weather</button>
-    <div id="weatherResult" class="weather-card"></div>
+
+  <!-- Sidebar / Drawer -->
+  <div class="sidebar" id="sidebar">
+    <h2>☁️ Weather Pro</h2>
+    <ul>
+      <li onclick="showSection('home')">🏠 Home</li>
+      <li onclick="showSection('profile')">👤 Profile</li>
+      <li onclick="showSection('settings')">⚙️ Settings</li>
+    </ul>
   </div>
+
+  <!-- Main Container -->
+  <div class="main">
+    <button class="toggle-btn" onclick="toggleSidebar()">☰</button>
+
+    <!-- Home Section -->
+    <section id="home" class="section active">
+      <h1>🌤️ Weather App</h1>
+      <input type="text" id="cityInput" placeholder="Enter city name" />
+      <button onclick="getWeather()">Check Weather</button>
+      <div id="weatherResult" class="weather-card"></div>
+    </section>
+
+    <!-- Profile Section -->
+    <section id="profile" class="section">
+      <h1>👤 My Profile</h1>
+      <p>Name: Zahirul</p>
+      <p>Email: zahirul@example.com</p>
+      <p>Location: Bangladesh</p>
+    </section>
+
+    <!-- Settings Section -->
+    <section id="settings" class="section">
+      <h1>⚙️ Settings</h1>
+      <p>Theme: <button onclick="toggleTheme()">Toggle Dark/Light</button></p>
+    </section>
+
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
